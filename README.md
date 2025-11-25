@@ -150,22 +150,4 @@ Required keys (example):
 <img width="1778" height="923" alt="Screenshot 2025-11-25 233624" src="https://github.com/user-attachments/assets/0a566077-4024-488d-82cc-a87504cc0dfe" />
 
 
-Create `.env.example` with placeholder values and add `.env` to `.gitignore` if not already ignored.
-
-## Docker (optional)
-
-If you'd like a Docker setup, I can add a `Dockerfile` and `docker-compose.yml` that runs the app and a MongoDB service for local testing.
-
-## Next steps I can help with
-
-- Add a `.env.example` and update `.gitignore`.
-- Add a `Dockerfile` + `docker-compose.yml` for local development.
-- Wire `utils/gemini.py` to a real LLM client and provide example prompts.
-- Create a small smoke-test script that exercises login → create project → export doc flow.
-
-Tell me which follow-up you'd like and I will make it next.
-
-## License
-
-This project uses the MIT License (check `LICENSE` in the repo).
 
