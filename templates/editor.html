@@ -1,0 +1,114 @@
+<!-- templates/editor.html -->
+{% extends "base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>{{ project.title }}</h1>
+    <p class="text-muted">Topic: {{ project.topic }} | Type: {{ project.doc_type.upper() }}</p>
+  </div>
+  <div>
+    <button onclick="generateAll()" class="btn btn-success btn-lg me-2">Generate All Content</button>
+    <a href="/document/{{ project._id }}/export" class="btn btn-primary btn-lg">Export File</a>
+  </div>
+<!-- templates/editor.html -->
+{% extends "base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>{{ project.title }}</h1>
+    <p class="text-muted">Topic: {{ project.topic }} | Type: {{ project.doc_type.upper() }}</p>
+  </div>
+  <div>
+    <button onclick="generateAll()" class="btn btn-success btn-lg me-2">Generate All Content</button>
+    <a href="/document/{{ project._id }}/export" class="btn btn-primary btn-lg">Export File</a>
+  </div>
+</div>
+
+<div id="sections">
+  {% for i in range(project.structure|length) %}
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between">
+      <h5>{{ project.structure[i] }}</h5>
+      <span>Section {{ i+1 }}</span>
+    </div>
+    <div class="card-body">
+      <textarea id="text-{{ i }}" class="form-control mb-3" rows="12" placeholder="Content will appear here...">{{ project.content.get(i|string, {}).get('text', '') }}</textarea>
+      
+      <div class="row">
+        <div class="col-md-9">
+          <input id="prompt-{{ i }}" class="form-control" placeholder="e.g., Make it shorter and more formal">
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100 refine-btn" data-pid="{{ project._id|e }}" data-idx="{{ i }}">Refine</button>
+        </div>
+      </div>
+
+      <div class="mt-3 d-flex gap-2 flex-wrap">
+        <button class="btn btn-success feedback-btn" data-action="like" data-pid="{{ project._id|e }}" data-idx="{{ i }}">Like</button>
+        <button class="btn btn-danger feedback-btn" data-action="dislike" data-pid="{{ project._id|e }}" data-idx="{{ i }}">Dislike</button>
+        <input id="comment-{{ i }}" class="form-control d-inline-block" style="width: 300px;" placeholder="Add comment">
+        <button class="btn btn-outline-secondary feedback-btn" data-action="comment" data-pid="{{ project._id|e }}" data-idx="{{ i }}">Save Comment</button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+async function generateAll() {
+  if (!confirm("Generate content for all sections?")) return;
+  await fetch(`/project/{{ project._id }}/generate`, {method: 'POST'});
+  location.reload();
+}
+
+async function refineSection(pid, idx) {
+  const text = document.getElementById(`text-${idx}`).value;
+  const prompt = document.getElementById(`prompt-${idx}`).value || "Improve this";
+  
+  const res = await fetch(`/document/${pid}/refine/${idx}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({current_text: text, prompt})
+  });
+  const data = await res.json();
+  document.getElementById(`text-${idx}`).value = data.text;
+  document.getElementById(`prompt-${idx}`).value = '';
+  alert("Refined!");
+}
+
+async function saveFeedback(pid, idx, action) {
+  let comment = '';
+  if (action === 'comment') {
+    comment = document.getElementById(`comment-${idx}`).value;
+    if (!comment.trim()) return alert("Write a comment");
+  }
+  await fetch(`/document/${pid}/feedback/${idx}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({action, comment})
+  });
+  alert(action.charAt(0).toUpperCase() + action.slice(1) + " saved!");
+  if (action === 'comment') document.getElementById(`comment-${idx}`).value = '';
+}
+
+// Attach event listeners to buttons rendered with data-attributes
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.refine-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      refineSection(btn.dataset.pid, btn.dataset.idx);
+    });
+  });
+
+  document.querySelectorAll('.feedback-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pid = btn.dataset.pid;
+      const idx = btn.dataset.idx;
+      const action = btn.dataset.action;
+      saveFeedback(pid, idx, action);
+    });
+  });
+});
+</script>
+{% endblock %}
