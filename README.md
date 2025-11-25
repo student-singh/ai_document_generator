@@ -140,6 +140,16 @@ Required keys (example):
 - `SECRET_KEY` — session secret
 - `GOOGLE_API_KEY` (optional) — API key used by `utils/gemini.py`
 
+<img width="1920" height="784" alt="Screenshot 2025-11-25 202048" src="https://github.com/user-attachments/assets/94ce7693-3e35-49ce-bb15-4fec7a65bcd1" />
+<img width="1860" height="868" alt="Screenshot 2025-11-25 210224" src="https://github.com/user-attachments/assets/d8198369-e446-4aae-bdeb-7ef70e7410a3" />
+<img width="1859" height="831" alt="Screenshot 2025-11-25 210317" src="https://github.com/user-attachments/assets/50cd2cfe-7803-4d7d-a67c-4b482af20116" />
+<img width="1920" height="785" alt="Screenshot 2025-11-25 210344" src="https://github.com/user-attachments/assets/b030400c-4a8a-450b-8ffe-8688cde285e9" />
+<img width="1836" height="871" alt="Screenshot 2025-11-25 210410" src="https://github.com/user-attachments/assets/0a9ef6cc-3a6f-42a4-8e34-5f7b7aa8fc65" />
+<img width="1845" height="880" alt="Screenshot 2025-11-25 210826" src="https://github.com/user-attachments/assets/61e2b21a-9490-4589-8896-ede9aeffd7fa" />
+<img width="1865" height="815" alt="Screenshot 2025-11-25 233552" src="https://github.com/user-attachments/assets/27d8fe36-e3b9-4b3b-8349-37e43c43e862" />
+<img width="1778" height="923" alt="Screenshot 2025-11-25 233624" src="https://github.com/user-attachments/assets/0a566077-4024-488d-82cc-a87504cc0dfe" />
+
+
 Create `.env.example` with placeholder values and add `.env` to `.gitignore` if not already ignored.
 
 ## Docker (optional)
